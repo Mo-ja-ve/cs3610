@@ -13,7 +13,7 @@ BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
     return new BinaryNode(key);
   }
 
-  if(key == node->key){ cout<<"\nError, Duplicate node!"; return;}
+  if(key == node->key) cout<<"\nError, Duplicate node!";
 
   if(key < node->key) {
     if(node->left == NULL) {
@@ -33,6 +33,23 @@ BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
       node->right = insert(key, node->right);
     }
   }
+
+  if(node->bfactor < -1 && key > node->right->key)  
+    return left_rotate(node);
+
+  if(node->bfactor > 1 && key < node->left->key)  
+    return right_rotate(node); 
+
+  if(node->bfactor > 1 && key > node->left->key){
+    node->left = left_rotate(node->left);  
+    return right_rotate(node);  
+  } 
+  
+  if(node->bfactor < -1 && key < node->right->key){
+    node->right = right_rotate(node->right);  
+    return left_rotate(node);  
+  } 
+  
   return node;
 }
 
@@ -58,12 +75,12 @@ void AVLTree::rec_print(BinaryNode* root, char option, int level){
       if(option == 'h'){
 
           rec_print(root->left, option, level);
-
+          cout <<" Height: "<< height(root);
+          rec_print(root->right, option, level);
       } 
   }
 
 int AVLTree::update_bf(BinaryNode* root){
-
   if(root == NULL) return 0;
 
   update_bf(root->left);

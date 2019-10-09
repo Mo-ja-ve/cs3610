@@ -13,6 +13,8 @@ BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
     return new BinaryNode(key);
   }
 
+  if(key == node->key){ cout<<"\nError, Duplicate node!"; return;}
+
   if(key < node->key) {
     if(node->left == NULL) {
       node->left = new BinaryNode(key); 
@@ -34,6 +36,15 @@ BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
   return node;
 }
 
+void AVLTree::print_tree(char option){
+
+  int level = 0;
+
+  if(root == NULL){ cout << "\nEmpty Tree!"; return;}
+
+  rec_print(root, option, level);
+}
+
 void AVLTree::rec_print(BinaryNode* root, char option, int level){
 
       if(root == NULL) return;
@@ -47,10 +58,27 @@ void AVLTree::rec_print(BinaryNode* root, char option, int level){
       if(option == 'h'){
 
           rec_print(root->left, option, level);
+
       } 
   }
+
+int AVLTree::update_bf(BinaryNode* root){
+
+  if(root == NULL) return 0;
+
+  update_bf(root->left);
+  root->bfactor = find_bf(root);
+  update_bf(root->right);
+}
 
 int AVLTree::height(BinaryNode* root){
     if(root == NULL) return 0;
     return max(height(root->left), height(root->right))+1;
 }
+
+int AVLTree::find_bf(BinaryNode* root){
+  if(root == NULL) return 0;
+
+  return (height(root->left) - height(root->right));
+}
+

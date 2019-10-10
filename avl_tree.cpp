@@ -10,7 +10,7 @@ void AVLTree::insert(const int key) {
 
 BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
   if (node == NULL) {
-    return new BinaryNode(key);
+    return new BinaryNode(key);cout
   }
 
   if(key == node->key) cout<<"\nError, Duplicate node!";
@@ -18,7 +18,7 @@ BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
   if(key < node->key) {
     if(node->left == NULL) {
       node->left = new BinaryNode(key); 
-      update_bf(node);
+      //update_bf(node);
     } 
     else {
       node->left = insert(key, node->left);
@@ -27,25 +27,29 @@ BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
   else {
     if(node->right == NULL) {
       node->right = new BinaryNode(key); 
-      update_bf(node);
+      //update_bf(node);
     } 
     else {
       node->right = insert(key, node->right);
     }
   }
+  
+  node->bfactor = height(node->left) - height(node->right);
 
-  if(node->bfactor < -1 && key > node->right->key)  
-    return left_rotate(node);
+  //cout<<"\nHello!";
 
-  if(node->bfactor > 1 && key < node->left->key)  
+  if(node->bfactor > 1 && node->left != NULL && key < node->left->key)  
     return right_rotate(node); 
 
-  if(node->bfactor > 1 && key > node->left->key){
+  if(node->bfactor < -1 && node->right != NULL && key > node->right->key)  
+    return left_rotate(node);
+
+  if(node->bfactor > 1 && node->left != NULL && key > node->left->key){
     node->left = left_rotate(node->left);  
     return right_rotate(node);  
   } 
   
-  if(node->bfactor < -1 && key < node->right->key){
+  if(node->bfactor < -1 && node->right != NULL && key < node->right->key){
     node->right = right_rotate(node->right);  
     return left_rotate(node);  
   } 
@@ -80,22 +84,54 @@ void AVLTree::rec_print(BinaryNode* root, char option, int level){
       } 
   }
 
-int AVLTree::update_bf(BinaryNode* root){
-  if(root == NULL) return 0;
+// int AVLTree::update_bf(BinaryNode* root){
+//   if(root == NULL) return 0;
 
-  update_bf(root->left);
-  root->bfactor = find_bf(root);
-  update_bf(root->right);
+//   update_bf(root->left);
+//   cout<<" heigh";
+//   update_bf(root->right);
+// }
+
+int AVLTree::height(BinaryNode* node){
+    if(node == NULL) return 0;
+    return max(height(node->left), height(node->right))+1;
 }
 
-int AVLTree::height(BinaryNode* root){
-    if(root == NULL) return 0;
-    return max(height(root->left), height(root->right))+1;
+// int AVLTree::find_bf(BinaryNode* root){
+//   if(root == NULL) return 0;
+
+//   return (height(root->left) - height(root->right));
+// }
+
+BinaryNode* AVLTree::left_rotate(BinaryNode* node){
+
+
+  //cout<<"\nHello! from left rotate 1";
+  BinaryNode* previous_right = node->right;
+  BinaryNode* previous_left = previous_right->left;
+
+  previous_right->left = node;
+  node->right = previous_left;
+
+
+  //cout<<"\nHello! from left rotate 2";
+
+  return previous_right;
 }
 
-int AVLTree::find_bf(BinaryNode* root){
-  if(root == NULL) return 0;
+BinaryNode* AVLTree::right_rotate(BinaryNode* node){
 
-  return (height(root->left) - height(root->right));
+
+  //cout<<"\nHello! from right rotate 1";
+
+  BinaryNode* previous_left = node->left;
+  BinaryNode* previous_right = previous_left->right;
+
+  previous_left->right = node;
+  node->left = previous_right;
+
+  //cout<<"\nHello! from right rotate 2";
+
+
+  return previous_left;
 }
-

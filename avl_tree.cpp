@@ -10,7 +10,7 @@ void AVLTree::insert(const int key) {
 
 BinaryNode* AVLTree::insert(const int key, BinaryNode* node) {
   if (node == NULL) {
-    return new BinaryNode(key);cout
+    return new BinaryNode(key);
   }
 
   if(key == node->key) cout<<"\nError, Duplicate node!";
@@ -104,8 +104,6 @@ int AVLTree::height(BinaryNode* node){
 // }
 
 BinaryNode* AVLTree::left_rotate(BinaryNode* node){
-
-
   //cout<<"\nHello! from left rotate 1";
   BinaryNode* previous_right = node->right;
   BinaryNode* previous_left = previous_right->left;
@@ -120,8 +118,6 @@ BinaryNode* AVLTree::left_rotate(BinaryNode* node){
 }
 
 BinaryNode* AVLTree::right_rotate(BinaryNode* node){
-
-
   //cout<<"\nHello! from right rotate 1";
 
   BinaryNode* previous_left = node->left;
@@ -134,4 +130,40 @@ BinaryNode* AVLTree::right_rotate(BinaryNode* node){
 
 
   return previous_left;
+}
+
+BinaryNode* AVLTree::remove(BinaryNode *root, int key){
+
+  if(root == NULL)
+    return root;
+
+  // go down left subtree to find matching key
+  if(key < root->key){
+    root->left = remove(root->left, key);
+  // if it wasn't smaller, we must go down right subtree
+  }else if(key > root->key){
+    root->right = remove(root->right, key);
+  //this is the case where we find the key that needs to be deleted
+  }else if(root->key == key){
+    if((root->left == NULL) || (root->right == NULL)){
+      
+      BinaryNode* newnode;
+
+      if(root->left){
+        newnode = root->left;
+      }else{ 
+        newnode = root->right;
+      }
+
+      if(newnode == NULL){
+        newnode=root;
+        root = NULL;
+      }else{
+        *root = *newnode;
+      }
+      free(newnode);
+    } 
+
+  }
+
 }

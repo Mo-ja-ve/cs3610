@@ -35,6 +35,7 @@ public:
   int update_bf(BinaryNode *root);
   BinaryNode* left_rotate(BinaryNode *root);
   BinaryNode* right_rotate(BinaryNode *root);
+  BinaryNode* remove(BinaryNode *root, int key);
   //BinaryNode* max(int lheight, int rheight);
 private:
   BinaryNode* insert(const int key, BinaryNode* node);

@@ -31,8 +31,10 @@ public:
   void insert(const int key);
   void write_height(BinaryNode* root);
   int  height(BinaryNode *root);
-  int find_bf(BinaryNode *root);
+  //int find_bf(BinaryNode *root);
   int update_bf(BinaryNode *root);
+  BinaryNode* left_rotate(BinaryNode *root);
+  BinaryNode* right_rotate(BinaryNode *root);
   //BinaryNode* max(int lheight, int rheight);
 private:
   BinaryNode* insert(const int key, BinaryNode* node);
